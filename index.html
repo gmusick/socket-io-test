@@ -1,0 +1,40 @@
+<!doctype html>
+
+<html>
+  <head>
+    <title>Test</title>
+    <style type="text/css">
+      html, body {
+        height: 100%;
+        width: 100%;
+      }
+
+      .fake-mouse {
+        background-color: #000;
+        height: 10px;
+        left: 0;
+        position: absolute;
+        top: 0;
+        width: 10px;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="fake-mouse"></div>
+
+    <script src="/socket.io/socket.io.js"></script>
+    <script>
+      var fakeMouse = document.querySelector('.fake-mouse');
+
+      var socket = io.connect("http://localhost:8080");
+      document.body.addEventListener('mousemove', function(e) {
+        socket.emit('mousemove', { x: e.x, y: e.y });
+      });
+
+      socket.on('mousemoved', function(data) {
+        fakeMouse.style.left = data.x + "px";
+        fakeMouse.style.top = data.y + "px";
+      });
+    </script>
+  </body>
+</html>
